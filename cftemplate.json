@@ -156,7 +156,16 @@
         "InstanceType": { "Ref": "ElasticSearchNodeInstanceType" },
         "KeyName": {  "Ref": "KeyName"  },
         "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
-          "#!/bin/bash -v \n"
+          "#!/bin/bash -v \n",
+          "yum -y update",
+          "rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch",
+          "echo [elasticsearch-1.7] > /etc/yum.repos.d/elasticsearch.repo",
+          "echo 'name=Elasticsearch repository for 1.7.x packages' >> /etc/yum.repos.d/elasticsearch.repo",
+          "echo 'baseurl=http://packages.elastic.co/elasticsearch/1.7/centos' >> /etc/yum.repos.d/elasticsearch.repo",
+          "echo 'gpgcheck=1' >> /etc/yum.repos.d/elasticsearch.repo",
+          "echo 'gpgkey=http://packages.elastic.co/GPG-KEY-elasticsearch' >> /etc/yum.repos.d/elasticsearch.repo",
+          "echo 'enabled=1' >> /etc/yum.repos.d/elasticsearch.repo",
+          "yum -y install elasticsearch"
         ]]}}
       }
     },
